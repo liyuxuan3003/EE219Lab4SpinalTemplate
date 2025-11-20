@@ -1,4 +1,4 @@
-package SpinalSulfur
+package EE219Lab4
 
 import spinal.core._
 import spinal.core.sim._
