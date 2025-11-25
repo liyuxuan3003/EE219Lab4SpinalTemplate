@@ -6,7 +6,7 @@ import spinal.lib._
 
 case class IMemPort(cfg: R219Config = R219Config()) extends Bundle with IMasterSlave {
   val addr = Bits(cfg.addrWidth bits)
-  val dataRd = Bits(cfg.dataWidth bits)
+  val dataRd = if (cfg.isVec) Bits(cfg.dataWidth * cfg.issues bits) else Bits(cfg.dataWidth bits)
 
   def asMaster(): Unit = {
     in(addr)
@@ -42,7 +42,7 @@ case class Memory(cfg: R219Config = R219Config()) extends Component {
   val io = new Bundle {
     val imem = master(IMemPort(cfg))
     val dmem = master(DMemPort(cfg))
-    val vmem = master(VMemPort(cfg))
+    val vmem = if (cfg.isVec) master(VMemPort(cfg)) else null
   }
 
   val mem = Mem(Bits(cfg.dataWidth bits), cfg.sizeMem).simPublic()
@@ -53,15 +53,24 @@ case class Memory(cfg: R219Config = R219Config()) extends Component {
     (((addr.asUInt - cfg.baseMem) >> 2) + offset).resized
   }
 
-  io.imem.dataRd := mem(convert(io.imem.addr))
   io.dmem.dataRd := mem(convert(io.dmem.addr))
   when(io.dmem.enableWr) {
     mem(convert(io.dmem.addr)) := io.dmem.dataWr
   }
 
-  io.vmem.dataRd := Vec.tabulate(words) { i => mem(convert(io.vmem.addr, i)) }.asBits
-  when(io.vmem.enableWr) {
-    io.vmem.dataWr.subdivideIn(words slices).zipWithIndex.foreach { case (data, i) => mem(convert(io.vmem.addr, i)) := data }
+  if (cfg.isVec) {
+    val addrScalar = (io.imem.addr)
+    val addrVector = (io.imem.addr.asUInt + 4).asBits
+    io.imem.dataRd := mem(convert(addrVector)) ## mem(convert(addrScalar))
+  } else {
+    io.imem.dataRd := mem(convert(io.imem.addr))
+  }
+
+  if (cfg.isVec) {
+    io.vmem.dataRd := Vec.tabulate(words) { i => mem(convert(io.vmem.addr, i)) }.asBits
+    when(io.vmem.enableWr) {
+      io.vmem.dataWr.subdivideIn(cfg.vectElements slices).zipWithIndex.foreach { case (data, i) => mem(convert(io.vmem.addr, i)) := data }
+    }
   }
 }
 

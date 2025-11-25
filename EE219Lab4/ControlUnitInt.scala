@@ -4,7 +4,7 @@ import spinal.core._
 import spinal.core.sim._
 import spinal.lib._
 
-case class I1ControlUnit(cfg: R219Config = R219Config()) extends Component {
+case class ControlUnitInt(cfg: R219Config = R219Config()) extends Component {
   val io = new Bundle {
     val opcode = in(Bits(cfg.opcodeWidth bits))
     val funct3 = in(Bits(cfg.funct3Width bits))
@@ -21,18 +21,18 @@ case class I1ControlUnit(cfg: R219Config = R219Config()) extends Component {
   // TODO
 }
 
-object I1ControlUnitSim extends App {
-  Config.sim.compile(I1ControlUnit()).doSim { dut =>
+object ControlUnitIntSim extends App {
+  Config.sim.compile(ControlUnitInt()).doSim { dut =>
     dut.clockDomain.forkStimulus(period = 10, resetCycles = 9)
     dut.clockDomain.waitRisingEdge()
 
   }
 }
 
-object I1ControlUnitVerilog extends App {
-  Config.spinal.generateVerilog(I1ControlUnit())
+object ControlUnitIntVerilog extends App {
+  Config.spinal.generateVerilog(ControlUnitInt())
 }
 
-object I1ControlUnitVhdl extends App {
-  Config.spinal.generateVhdl(I1ControlUnit())
+object ControlUnitIntVhdl extends App {
+  Config.spinal.generateVhdl(ControlUnitInt())
 }

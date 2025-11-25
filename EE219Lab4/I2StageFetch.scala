@@ -4,13 +4,13 @@ import spinal.core._
 import spinal.core.sim._
 import spinal.lib._
 
-case class I1StageFetch(cfg: R219Config = R219Config()) extends Component {
+case class I2StageFetch(cfg: R219Config = R219Config(isVec = true)) extends Component {
   val io = new Bundle {
     val pcSrc = in(PcSrc())
     val pcTarget = in(Bits(cfg.addrWidth bits))
     val pcPlus4 = out(Bits(cfg.addrWidth bits))
     val pc = out(Bits(cfg.addrWidth bits))
-    val instr = out(Bits(cfg.dataWidth bits))
+    val instr = out(Vec(Bits(cfg.dataWidth bits), cfg.issues))
     val imem = slave(IMemPort(cfg))
   }
 
@@ -22,21 +22,21 @@ case class I1StageFetch(cfg: R219Config = R219Config()) extends Component {
   io.pc := ps.io.pc
 
   io.imem.addr := ps.io.pc
-  io.instr := io.imem.dataRd
+  io.instr := io.imem.dataRd.subdivideIn(cfg.issues slices)
 }
 
-object I1StageFetchSim extends App {
-  Config.sim.compile(I1StageFetch()).doSim { dut =>
+object I2StageFetchSim extends App {
+  Config.sim.compile(I2StageFetch()).doSim { dut =>
     dut.clockDomain.forkStimulus(period = 10, resetCycles = 9)
     dut.clockDomain.waitRisingEdge()
 
   }
 }
 
-object I1StageFetchVerilog extends App {
-  Config.spinal.generateVerilog(I1StageFetch())
+object I2StageFetchVerilog extends App {
+  Config.spinal.generateVerilog(I2StageFetch())
 }
 
-object I1StageFetchVhdl extends App {
-  Config.spinal.generateVhdl(I1StageFetch())
+object I2StageFetchVhdl extends App {
+  Config.spinal.generateVhdl(I2StageFetch())
 }

@@ -18,8 +18,8 @@ case class I1StageExcute(cfg: R219Config = R219Config()) extends Component {
     val pcSrc = out(PcSrc())
   }
 
-  val alu = I1Alu(cfg)
-  val bu = I1BranchUnit(cfg)
+  val alu = Alu(cfg)
+  val bu = BranchUnit(cfg)
 
   // TODO
 }

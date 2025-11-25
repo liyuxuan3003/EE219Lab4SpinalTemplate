@@ -3,7 +3,7 @@
 ; Do not modify this file !!!
 ; =======================================
 
-lui         x5,     2157969408          ; nop                                       ;   0x80a00000
+lui         x5,     526848          ; nop                                       ;   0x80a00000
 
 # Test for vadd.vi & vse32.v
 addi        x5,     x5,     0           ; nop                                       ;
@@ -78,4 +78,3 @@ nop                                     ; vmv.x.s     x8,     vx2,    vx0,    1 
 nop                                     ; vmv.v.x     vx3,    vx31,   x8,     1     ;   vx3[i] = x8
 nop                                     ; vse32.v     vx3,    x5,             1     ;   mem[5][0:7]=13
 addi        x5,     x5,     32          ; nop                                       ; 
-

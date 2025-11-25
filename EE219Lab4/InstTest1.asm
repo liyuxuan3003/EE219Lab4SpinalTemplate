@@ -4,8 +4,8 @@
 ; =======================================
 
 # Test for addi & sw & lui
-lui     x5,     2156920832          ;   0x80900000
-lui     x6,     2156920832          ;   0x80900000
+lui     x5,     526592          ;   0x80900000
+lui     x6,     526592          ;   0x80900000
 
 addi    x7,     x0,     100         ;   
 sw      x7,     0(x6)               ;   mem[0] = 100
@@ -67,23 +67,23 @@ sw      x7,     0(x6)               ;   mem[8] = 0
 addi    x6,     x6,     4           ;
 
 # Test for blt 
-addi    x7,     x0,     0           ;
-addi    x8,     x0,     4           ;
-addi    x9,     x0,     60          ;
+addi    x7,     x0,     0           ;   x7 = 0
+addi    x8,     x0,     4           ;   x8 = 4
+addi    x9,     x0,     60          ;   x9 = 60
 loop:
-addi    x9,     x9,     1           ;
-addi    x7,     x7,     1           ;
-blt     x7,     x8,     loop        ;
+addi    x9,     x9,     1           ;   x9 = x9 + 1
+addi    x7,     x7,     1           ;   x7 = x7 + 1
+blt     x7,     x8,     loop        ;   if (x7 < x8) goto loop
 
-addi    x7,     x9,     0           ;
+addi    x7,     x9,     0           ;   x7 = x9
 sw      x7,     0(x6)               ;   mem[9] = 64
-addi    x6,     x6,     4           ;
+addi    x6,     x6,     4           ;   x6 = x6 + 4
 
 # Test for jal
-addi    x7,     x0,     50          ;
-jal     x1,     label 
-addi    x7,     x7,     1           ;
+addi    x7,     x0,     50          ;   x7 = 50
+jal     x1,     label               ;   goto label
+addi    x7,     x7,     1           ;   x7 = x7 + 1
 label:
-addi    x7,     x7,     10          ;
+addi    x7,     x7,     10          ;   x7 = x7 + 10
 sw      x7,     0(x6)               ;   mem[10] = 60
-addi    x6,     x6,     4           ;
+addi    x6,     x6,     4           ;   x6 = x6 + 4

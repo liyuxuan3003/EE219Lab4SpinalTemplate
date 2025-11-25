@@ -18,9 +18,9 @@ case class I1StageDecode(cfg: R219Config = R219Config()) extends Component {
     val aluSrcB = out(AluSrcB())
   }
 
-  val cu = I1ControlUnit(cfg)
-  val rf = I1RegisterFile(cfg)
-  val ext = I1ImmExtend(cfg)
+  val cu = ControlUnitInt(cfg)
+  val rf = RegisterFileInt(cfg)
+  val ext = ImmExtend(cfg)
 
   // TODO
 }
