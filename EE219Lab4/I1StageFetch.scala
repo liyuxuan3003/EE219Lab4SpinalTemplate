@@ -10,7 +10,7 @@ case class I1StageFetch(cfg: R219Config = R219Config()) extends Component {
     val pcSrc = in(PcSrc())
     // Pc target (if jump)
     val pcTarget = in(Bits(cfg.addrWidth bits))
-    // Pc + 4 (ouput for Mux in Stage W, lui required rd = pc + 4)
+    // Pc + 4 (ouput for Mux in Stage W, jal required rd = pc + 4)
     val pcPlus4 = out(Bits(cfg.addrWidth bits))
     // Pc
     val pc = out(Bits(cfg.addrWidth bits))
