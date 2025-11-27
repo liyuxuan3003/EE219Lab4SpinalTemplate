@@ -6,10 +6,15 @@ import spinal.lib._
 
 case class Alu(cfg: R219Config = R219Config()) extends Component {
   val io = new Bundle {
+    // Alu input 1
     val srca = in(Bits(cfg.dataWidth bits))
+    // Alu input 2
     val srcb = in(Bits(cfg.dataWidth bits))
+    // Alu operation
     val aluOp = in(AluOp())
+    // Alu output
     val result = out(Bits(cfg.dataWidth bits))
+    // Alu less (-> BranchUnit)
     val less = out(Bool())
   }
 

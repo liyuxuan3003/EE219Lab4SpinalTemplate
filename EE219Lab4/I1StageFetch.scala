@@ -6,22 +6,33 @@ import spinal.lib._
 
 case class I1StageFetch(cfg: R219Config = R219Config()) extends Component {
   val io = new Bundle {
+    // Pc next select
     val pcSrc = in(PcSrc())
+    // Pc target (if jump)
     val pcTarget = in(Bits(cfg.addrWidth bits))
+    // Pc + 4 (ouput for Mux in Stage W, lui required rd = pc + 4)
     val pcPlus4 = out(Bits(cfg.addrWidth bits))
+    // Pc
     val pc = out(Bits(cfg.addrWidth bits))
+    // Instruction
     val instr = out(Bits(cfg.dataWidth bits))
+    // Imem interface
     val imem = slave(IMemPort(cfg))
   }
 
+  // PcSelect
   val ps = PcSelect(cfg)
 
+  // Input of PcSelect
   ps.io.pcSrc := io.pcSrc
   ps.io.pcTarget := io.pcTarget
+
+  // Input of Imem
+  io.imem.addr := ps.io.pc
+
+  // Output
   io.pcPlus4 := ps.io.pcPlus4
   io.pc := ps.io.pc
-
-  io.imem.addr := ps.io.pc
   io.instr := io.imem.dataRd
 }
 

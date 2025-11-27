@@ -6,8 +6,11 @@ import spinal.lib._
 
 case class BranchUnit(cfg: R219Config = R219Config()) extends Component {
   val io = new Bundle {
+    // Alu less
     val less = in(Bool())
+    // Branch type
     val branchOp = in(BranchOp())
+    // Pc next select
     val pcSrc = out(PcSrc())
   }
 

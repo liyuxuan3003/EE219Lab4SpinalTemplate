@@ -6,9 +6,13 @@ import spinal.lib._
 
 case class Vlu(cfg: R219Config = R219Config()) extends Component {
   val io = new Bundle {
+    // Vlu input 1
     val srca = in(Vec(Bits(cfg.dataWidth bits), cfg.vectElements))
+    // Vlu input 2
     val srcb = in(Vec(Bits(cfg.dataWidth bits), cfg.vectElements))
+    // Vlu operation
     val vluOp = in(VluOp())
+    // Vlu output
     val result = out(Vec(Bits(cfg.dataWidth bits), cfg.vectElements))
   }
 

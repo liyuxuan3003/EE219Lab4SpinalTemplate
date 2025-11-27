@@ -30,7 +30,7 @@ PYTHON:=python
 
 PY_ASSEMBLER:=Compile.py
 
-.PHONY: ${TASKS}
+.PHONY: ${TASKS} all
 
 SRCS_ASM_I1:=$(addsuffix .asm,${TASKS_I1})
 SRCS_ASM_I2:=$(addsuffix .asm,${TASKS_I2})
@@ -40,11 +40,15 @@ BINS_I1:=$(addprefix ${BUILD_DIR_ASM}/,$(addsuffix .bin,${TASKS_I1}))
 BINS_I2:=$(addprefix ${BUILD_DIR_ASM}/,$(addsuffix .bin,${TASKS_I2}))
 BINS:=${BINS_I1} ${BINS_I2}
 
-TXTS_I1:=$(addprefix ${BUILD_DIR_ASM}/,$(addsuffix .txt,${TASKS_I1}))
-TXTS_I2:=$(addprefix ${BUILD_DIR_ASM}/,$(addsuffix .txt,${TASKS_I2}))
+TXTS_I1:=$(addprefix ${BUILD_DIR}/,$(addsuffix .txt,${TASKS_I1}))
+TXTS_I2:=$(addprefix ${BUILD_DIR}/,$(addsuffix .txt,${TASKS_I2}))
 TXTS:=${TXTS_I1} ${TXTS_I2}
 
-${TASKS}: %: ${BUILD_DIR_ASM}/%.txt
+all: ${TASKS}
+	${NOTIFY_DONE}
+
+${TASKS}: %: ${BUILD_DIR}/%.txt
+	${NOTIFY_DONE}
 
 ${BINS_I1}: ${BUILD_DIR_ASM}/%.bin: %.asm | ${BUILD_DIR_ASM}
 	${PYTHON} ${PY_ASSEMBLER} -n 1 -i $< -o $@
@@ -54,11 +58,11 @@ ${BINS_I2}: ${BUILD_DIR_ASM}/%.bin: %.asm | ${BUILD_DIR_ASM}
 	${PYTHON} ${PY_ASSEMBLER} -n 2 -i $< -o $@
 	${NOTIFY_DONE}
 
-${TXTS_I1}: ${BUILD_DIR_ASM}/%.txt: ${BUILD_DIR_ASM}/%.bin ${SRCS_SPINAL} | ${BUILD_DIR_ASM} ${BUILD_DIR_SIM}
+${TXTS_I1}: ${BUILD_DIR}/%.txt: ${BUILD_DIR_ASM}/%.bin ${SRCS_SPINAL} | ${BUILD_DIR} ${BUILD_DIR_SIM}
 	${SBT} "runMain ${PROJECT}.${ISSUE1}Sim $*"
 	${NOTIFY_DONE}
 
-${TXTS_I2}: ${BUILD_DIR_ASM}/%.txt: ${BUILD_DIR_ASM}/%.bin ${SRCS_SPINAL} | ${BUILD_DIR_ASM} ${BUILD_DIR_SIM}
+${TXTS_I2}: ${BUILD_DIR}/%.txt: ${BUILD_DIR_ASM}/%.bin ${SRCS_SPINAL} | ${BUILD_DIR} ${BUILD_DIR_SIM}
 	${SBT} "runMain ${PROJECT}.${ISSUE2}Sim $*"
 	${NOTIFY_DONE}
 

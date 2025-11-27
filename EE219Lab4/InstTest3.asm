@@ -3,7 +3,6 @@
 ; Do not modify this file !!!
 ; =======================================
 
-;lui         x5,     2157969408          ; nop                                       ;   0x80a00000
 lui         x5,     526848          ; nop                                       ;   0x80a00000
 
 # Test for vadd.vi & vse32.v

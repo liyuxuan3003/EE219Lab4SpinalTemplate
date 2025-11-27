@@ -6,9 +6,13 @@ import spinal.lib._
 
 case class VecExtend(cfg: R219Config = R219Config()) extends Component {
   val io = new Bundle {
+    // instruction (including immediate)
     val instr = in(Bits(cfg.dataWidth bits))
+    // vector extend from what (imm / scalar)
     val vextSrc = in(VextSrc())
+    // scalar input
     val scalar = in(Bits(cfg.dataWidth bits))
+    // vector output
     val vector = out(Vec(Bits(cfg.dataWidth bits), cfg.vectElements))
   }
 

@@ -2,6 +2,10 @@
 
 EE219Lab4SpinalTemplate针对EE219课程的Lab4，重新设计了一个完全基于SpinalHDL的代码框架。
 
+ComputerArchitecture笔记：https://github.com/liyuxuan3003/ComputerArchitecture
+
+该模板中，标量部分的微架构设计基本参照了CA笔记中绘制的RISC-V单周期处理器的架构图（部分控制信号和模块划分来自流水线版本的架构图），你可以从Release中下载到编译好的PDF文件。
+
 运行1.1测试
 ```
 make InstTest1
@@ -27,12 +31,14 @@ make MacVector
 make InstTest3
 ```
 
-运行3.2测试（尚未支持）
+运行3.2测试
 ```
 make Softmax
 ```
 
-该框架仍在开发中。
+## 关于v1.1至v1.2的更新内容改概要
+- 现在3.2也完全可以支持了
+- 添加了大量注释
 
 ## 关于v1.0至v1.1的更新内容概要
 - 添加了双发射的硬件框架，现在除3.2外都可以运行

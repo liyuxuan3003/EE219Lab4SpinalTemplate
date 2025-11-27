@@ -6,8 +6,11 @@ import spinal.lib._
 
 case class ImmExtend(cfg: R219Config = R219Config()) extends Component {
   val io = new Bundle {
+    // instruction (including immedaite)
     val instr = in(Bits(cfg.dataWidth bits))
+    // immediate type
     val immSrc = in(ImmSrc())
+    // immediate extended
     val immExt = out(Bits(cfg.dataWidth bits))
   }
 

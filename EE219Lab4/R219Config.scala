@@ -35,4 +35,7 @@ case class R219Config(isVec: Boolean = false) {
   val baseMcD = 0x80800000L
   val baseDataI1 = 0x80900000L
   val baseDataI2 = 0x80a00000L
+  val baseSoftmaxInp = 0x81000000L
+  val baseSoftmaxExp = 0x81000020L
+  val baseSoftmaxOut = 0x81100000L
 }

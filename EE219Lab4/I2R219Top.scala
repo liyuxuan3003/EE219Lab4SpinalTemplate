@@ -7,33 +7,50 @@ import spinal.lib._
 case class I2R219Top(cfg: R219Config = R219Config(isVec = true)) extends Component {
   val io = new Bundle {}
 
+  // R219 core for double issue
   val r219 = I2R219Core(cfg)
+  // Memory
   val memory = Memory(cfg)
 
+  // Connect Imem, Dmem, Vmem interface
   r219.io.imem <> memory.io.imem
   r219.io.dmem <> memory.io.dmem
   r219.io.vmem <> memory.io.vmem
 }
 
 object I2R219TopSim extends App {
+  // Create config with isVec enable
   val cfg = R219Config(isVec = true)
+  // Default key = InstTest2
   val key = if (args.length > 0) args(0) else "InstTest2"
+  // Simulation
   Config.sim.compile(I2R219Top(cfg)).doSim { dut =>
+    // Get mem write / read function
     val memWr = (w, i) => dut.memory.mem.setBigInt(w, i)
     val memRd = (w) => dut.memory.mem.getBigInt(w)
+    // Get test object by key match
     val test: Test = key match {
       case "InstTest2" => new InstTest2(cfg, memWr, memRd)
       case "InstTest3" => new InstTest3(cfg, memWr, memRd)
+      case "MacVector" => new MacVector(cfg, memWr, memRd)
+      case "Softmax"   => new Softmax(cfg, memWr, memRd)
       case other       => new Test(other, cfg, memWr, memRd)
     }
+    // Get program length
     val length = test.prSim()
+    // Set clock
     dut.clockDomain.forkStimulus(period = 10, resetCycles = 9)
     dut.clockDomain.waitRisingEdge()
+    // Start running
     for (cycles <- 0 until 0x1000000) {
+      // Detect if pc > program length
       if (dut.r219.stageF.ps.pcReg.toLong > cfg.baseInst + (length - 1) * 4) {
-        val result = test.poSim()
+        // Show result
+        test.poSim()
+        // Stop running
         simSuccess()
       }
+      // Next cycle
       dut.clockDomain.waitRisingEdge()
     }
 

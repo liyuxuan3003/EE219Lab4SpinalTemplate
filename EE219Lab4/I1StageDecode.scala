@@ -6,20 +6,33 @@ import spinal.lib._
 
 case class I1StageDecode(cfg: R219Config = R219Config()) extends Component {
   val io = new Bundle {
+    // Instruction
     val instr = in(Bits(cfg.dataWidth bits))
+    // Data of rs1 (output)
     val rs1Data = out(Bits(cfg.dataWidth bits))
+    // Data of rs2 (output)
     val rs2Data = out(Bits(cfg.dataWidth bits))
+    // Data of rd (input)
     val rdData = in(Bits(cfg.dataWidth bits))
+    // Extended imm (output)
     val immExt = out(Bits(cfg.dataWidth bits))
+    // Writeback select
     val resultSrc = out(ResultSrc())
+    // Memory write enable
     val memWrite = out(Bool())
+    // BranchUnit operation
     val branchOp = out(BranchOp())
+    // Alu operation
     val aluOp = out(AluOp())
+    // Alu srcb source select
     val aluSrcB = out(AluSrcB())
   }
 
+  // ControlUnit
   val cu = ControlUnitInt(cfg)
+  // RegisterFile
   val rf = RegisterFileInt(cfg)
+  // ImmExtend
   val ext = ImmExtend(cfg)
 
   // TODO
